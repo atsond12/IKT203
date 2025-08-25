@@ -1,0 +1,5 @@
+# Ignore Visual Studio cache
+.vs/
+
+# Ignore build/output directory
+out/

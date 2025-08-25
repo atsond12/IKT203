@@ -1,0 +1,7 @@
+{
+	"name": "dat203-portfolio",
+	"version-string": "1.0.0",
+	"dependencies": [
+		"qtbase"
+	]
+}

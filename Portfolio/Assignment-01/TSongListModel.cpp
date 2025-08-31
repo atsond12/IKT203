@@ -62,7 +62,7 @@ QVariant TSongListModel::data(const QModelIndex& index, int role) const
 
     // --- 2. Get the Song Object ---
     // Retrieve the pointer to the correct TSong object from the linked list.
-    TSong* song = *llSongs->GetAtIndex(index.row());
+    TSong* song = llSongs->GetAtIndex(index.row());
     if (!song) {
         return QVariant();
     }
@@ -134,7 +134,7 @@ bool TSongListModel::setData(const QModelIndex& index, const QVariant& value, in
     }
 
     // Get the song object for the given row.
-    TSong* song = *llSongs->GetAtIndex(index.row());
+    TSong* song = llSongs->GetAtIndex(index.row());
     if (!song) {
         return false;
     }

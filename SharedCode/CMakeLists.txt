@@ -13,6 +13,9 @@ add_library(SharedCode INTERFACE)
 target_sources(SharedCode
     PUBLIC
         list.hpp
+        TSingleLinkedListTemplate.hpp
+        TDoublyLinkedListTemplate.hpp
+        TCircularDoublyLinkedListTemplate.hpp
         queue.hpp
         stack.hpp
 )

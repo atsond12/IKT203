@@ -14,4 +14,4 @@ project ("Portfolio")
 # Include sub-projects.
 
 # Tell CMake to find and include the first exercise project.
-add_subdirectory(Assigment-01)
+add_subdirectory(Assignment-01)

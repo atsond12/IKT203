@@ -7,21 +7,21 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-add_executable(Assigment-01
+add_executable(Assignment-01
     main.cpp
     TMainForm.cpp
     TMainForm.h
     frmMain.ui
  "TSongListModel.cpp" "TSong.h" )
 
-target_link_libraries(Assigment-01
+target_link_libraries(Assignment-01
     PRIVATE
     SharedCode
     Qt6::Widgets
 )
 
-add_custom_command(TARGET Assigment-01 POST_BUILD
-    COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/deploy.ps1" -BuildDir "$<TARGET_FILE_DIR:Assigment-01>"
+add_custom_command(TARGET Assignment-01 POST_BUILD
+    COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_SOURCE_DIR}/deploy.ps1" -BuildDir "$<TARGET_FILE_DIR:Assignment-01>"
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     COMMENT "Deploying Qt dependencies via PowerShell script..."
 )

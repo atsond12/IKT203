@@ -87,7 +87,7 @@ public:
 	}
 	void Enqueue(int aItem) {
 		if (itemCount < maxSize) {
-			back = (back + 1) % maxSize;
+			back = (back + 1) % maxSize; // Circular increment
 			queueArray[back] = aItem;
 			itemCount++;
 		}
@@ -98,7 +98,7 @@ public:
 	int Dequeue() {
 		if (!IsEmpty()) {
 			int item = queueArray[front];
-			front = (front + 1) % maxSize;
+			front = (front + 1) % maxSize; // Circular increment
 			itemCount--;
 			return item;
 		}
@@ -222,6 +222,7 @@ b) The goal is to find the first occurrence of the number '0'.
 c) In a short comment, explain how the LIFO behavior of the stack guides the search to explore as deeply as possible along one path before backtracking.
 */
 
+
 // Helper function to check if a cell is within bounds and not visited
 static bool IsValid(int aRow, int aCol) {
 	return aRow >= 0 && aRow < GRID_SIZE && aCol >= 0 && aCol < GRID_SIZE && !visited[aRow][aCol];
@@ -247,6 +248,28 @@ static bool DFS(int startRow, int startCol) {
 		if (IsValid(row - 1, col)) stack.Push((row - 1) * GRID_SIZE + col);
 	}
 	std::cout << "0 not found in DFS" << std::endl;
+	return false;
+}
+
+static bool BFS(int startRow, int startCol) {
+	TQueue queue(GRID_SIZE * GRID_SIZE);
+	queue.Enqueue(startRow * GRID_SIZE + startCol); // Encode 2D position as 1D
+	while (!queue.IsEmpty()) {
+		int pos = queue.Dequeue();
+		int row = pos / GRID_SIZE;
+		int col = pos % GRID_SIZE;
+		if (grid[row][col] == 0) {
+			std::cout << "Found 0 at (" << row << ", " << col << ")" << std::endl;
+			return true;
+		}
+		visited[row][col] = true;
+		// Enqueue adjacent cells (right, down, left, up)
+		if (IsValid(row, col + 1)) queue.Enqueue(row * GRID_SIZE + (col + 1));
+		if (IsValid(row + 1, col)) queue.Enqueue((row + 1) * GRID_SIZE + col);
+		if (IsValid(row, col - 1)) queue.Enqueue(row * GRID_SIZE + (col - 1));
+		if (IsValid(row - 1, col)) queue.Enqueue((row - 1) * GRID_SIZE + col);
+	}
+	std::cout << "0 not found in BFS" << std::endl;
 	return false;
 }
 
@@ -276,9 +299,15 @@ int main()
 	int startCol = std::rand() % GRID_SIZE;
 	std::cout << "Starting DFS from (" << startRow << ", " << startCol << ")" << std::endl;
 	DFS(startRow, startCol);
+	std::cout << std::endl << "Re-initializing visited array for BFS:" << std::endl;
+	for (int i = 0; i < GRID_SIZE; i++) {
+		for (int j = 0; j < GRID_SIZE; j++) {
+			visited[i][j] = false; // Reset visited array
+		}
+	}
+	std::cout << "Performing BFS to find '0':" << std::endl;
+	BFS(startRow, startCol);
 	std::cout << "----------------------------------------------------" << std::endl << std::endl;
-
-
 
 
 	return 0;

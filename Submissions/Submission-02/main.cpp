@@ -44,7 +44,10 @@ static int fibonacci(int aN)
 {
 	if (aN <= 0) return 0; // Base case: fibonacci(0) = 0
 	if (aN == 1) return 1; // Base case: fibonacci(1) = 1
-	return fibonacci(aN - 1) + fibonacci(aN - 2); // Recursive call
+	int a = fibonacci(aN - 1);
+	int b = fibonacci(aN - 2);
+	std::cout << a << " + " << b << " = " << (a + b) << std::endl; // Print the sum of the two preceding numbers
+	return a + b; // Recursive call
 }
 
 // Count occurrences of a character in a string
@@ -90,7 +93,7 @@ int main()
 	std::cout << std::endl << "2^10: " << power(2, 10);
 	std::cout << std::endl << "------------------------------------------------" << std::endl;
 
-	std::cout << std::endl << "10th Fibonacci number: " << fibonacci(10);
+	std::cout << std::endl << "4th Fibonacci number: " << std::endl << fibonacci(4);
 	std::cout << std::endl << "------------------------------------------------" << std::endl;
 
 	std::cout << std::endl << "Occurrences of 'l' in 'Hello, World!': " << countOccurrences("Hello, World!", 'l');

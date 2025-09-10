@@ -311,7 +311,7 @@ d) Create a second 100x100 boolean array to keep track of visited cells.
 */
 
 
-static const int GRID_SIZE = 100;
+static const int GRID_SIZE = 7;
 static int grid[GRID_SIZE][GRID_SIZE];
 static bool visited[GRID_SIZE][GRID_SIZE] = { false };
 #include <cstdlib>
@@ -342,18 +342,18 @@ static bool IsValid(int aRow, int aCol) {
 // The stack's LIFO behavior allows the DFS to explore one path fully before backtracking, ensuring that all possible routes are checked in depth-first order.
 static bool DFS(int aStartRow, int aStartCol) {
 	TStackArray stack(GRID_SIZE * GRID_SIZE);
-	stack.Push(aStartRow * GRID_SIZE + aStartCol); // Encode 2D position as 1D
+	int cellPos = aStartRow * GRID_SIZE + aStartCol; // Encode 2D position as 1D
+	stack.Push(cellPos); 
 	while (!stack.IsEmpty()) {
-		int pos = stack.Pop();
-		int row = pos / GRID_SIZE;
-		int col = pos % GRID_SIZE;
+		cellPos = stack.Pop();
+		int row = cellPos / GRID_SIZE;
+		int col = cellPos % GRID_SIZE;
 		if (grid[row][col] == 0) {
 			std::cout << "Found 0 at (" << row << ", " << col << ")" << std::endl;
 			return true;
 		}
 		std::cout << "Visiting (" << row << ", " << col << ") with value " << grid[row][col] << std::endl;
 		visited[row][col] = true;
-		// Push adjacent cells onto the stack (top-left, top, top-right, right, bottom-right, bottom, bottom-left, left)
 		int neighbors[4][2] = {
 			{row - 1, col},     // Top
 			{row, col + 1},     // Right
@@ -365,7 +365,8 @@ static bool DFS(int aStartRow, int aStartCol) {
 			int newRow = neighbors[i][0];
 			int newCol = neighbors[i][1];
 			if (IsValid(newRow, newCol)) {
-				stack.Push(newRow * GRID_SIZE + newCol);
+				cellPos = newRow * GRID_SIZE + newCol;
+				stack.Push(cellPos);
 			}
 		}
 	}
@@ -431,8 +432,8 @@ int main()
 
 	std::cout << "Initializing 100x100 Grid and Performing DFS to find '0':" << std::endl;
 	InitializeGrid();
-	int startRow = std::rand() % GRID_SIZE;
-	int startCol = std::rand() % GRID_SIZE;
+	int startRow = 3; //std::rand() % GRID_SIZE;
+	int startCol = 2; //std::rand() % GRID_SIZE;
 	std::cout << "Starting DFS from (" << startRow << ", " << startCol << ")" << std::endl;
 	DFS(startRow, startCol);
 	std::cout << std::endl << "Re-initializing visited array for BFS:" << std::endl;

@@ -19,16 +19,16 @@ D) Add a Peek() method to view the top item without removing it.
 e) Include an IsEmpty() method to check if the stack is empty.
 */
 
-class TStack {
+class TStackArray {
 private:
 	int maxSize = 0;
 	int* stackArray = nullptr;
 	int top = -1; // Index of the top element
 public:
-	TStack(int aSize) : maxSize(aSize) {
+	TStackArray(int aSize) : maxSize(aSize) {
 		stackArray = new int[maxSize];
 	}
-	~TStack() {
+	~TStackArray() {
 		delete[] stackArray;
 	}
 	void Push(int aItem) {
@@ -62,6 +62,7 @@ public:
 	}
 };
 
+
 /*
 2. Implementing a Queue:
 a) Create a simple TQueue class that can hold int values.
@@ -71,7 +72,7 @@ d) Add a Peek() method to view the item at the front without removing it.
 e) Include an IsEmpty() method to check if the queue is empty.
 */
 
-class TQueue {
+class TQueueArray {
 private:
 	int maxSize = 0;
 	int* queueArray = nullptr;
@@ -79,10 +80,10 @@ private:
 	int back = -1; // Index of the back element
 	int itemCount = 0; // Number of items in the queue
 public:
-	TQueue(int aSize) : maxSize(aSize) {
+	TQueueArray(int aSize) : maxSize(aSize) {
 		queueArray = new int[maxSize];
 	}
-	~TQueue() {
+	~TQueueArray() {
 		delete[] queueArray;
 	}
 	void Enqueue(int aItem) {
@@ -121,6 +122,112 @@ public:
 	}
 };
 
+class TNodeInteger {
+	public:
+	int data;
+	TNodeInteger* next;
+	TNodeInteger(int aData) : data(aData), next(nullptr) {}
+};
+
+// Stack implemented using a linked list with dummy head node
+class TStackLinkedList {
+	private:
+		TNodeInteger* top = nullptr;
+public:
+	TStackLinkedList() {
+		top = new TNodeInteger(0); // Dummy head node
+	}
+	~TStackLinkedList() {
+		while (!IsEmpty()) {
+			Pop();
+		}
+		delete top; // Delete dummy head node
+	}
+	void Push(int aItem) {
+		TNodeInteger* newNode = new TNodeInteger(aItem);
+		newNode->next = top->next;
+		top->next = newNode;
+	}
+	int Pop() {
+		if (!IsEmpty()) {
+			TNodeInteger* temp = top->next;
+			int item = temp->data;
+			top->next = temp->next;
+			delete temp; // Free memory
+			return item; 
+		}
+		else {
+			std::cout << "Stack Underflow" << std::endl;
+			return -1; // Indicate error
+		}
+	}
+	int Peek() const {
+		if (!IsEmpty()) {
+			return top->next->data;
+		}
+		else {
+			std::cout << "Stack is empty" << std::endl;
+			return -1; // Indicate error
+		}
+	}
+	bool IsEmpty() const {
+		return top->next == nullptr;
+	}
+};
+
+// Queue implemented using a linked list with dummy head node
+class TQueueLinkedList {
+private:
+	TNodeInteger* front = nullptr;
+	TNodeInteger* back = nullptr;
+public:
+	TQueueLinkedList() {
+		front = new TNodeInteger(0); // Dummy head node
+		back = front; // Initially, front and back point to the dummy node
+	}
+	~TQueueLinkedList() {
+		while (!IsEmpty()) {
+			Dequeue();
+		}
+		delete front; // Delete dummy head node
+	}
+	void Enqueue(int aItem) {
+		TNodeInteger* newNode = new TNodeInteger(aItem);
+		back->next = newNode;
+		back = newNode;
+	}
+	int Dequeue() {
+		if (!IsEmpty()) {
+			TNodeInteger* temp = front->next;
+			int item = temp->data;
+			front->next = temp->next;
+			if (back == temp) { // If the dequeued node was the last node
+				back = front; // Reset back to the dummy head
+			}
+			delete temp; // Free memory
+			return item;
+		}
+		else {
+			std::cout << "Queue Underflow" << std::endl;
+			return -1; // Indicate error
+		}
+	}
+	int Peek() const {
+		if (!IsEmpty()) {
+			return front->next->data;
+		}
+		else {
+			std::cout << "Queue is empty" << std::endl;
+			return -1; // Indicate error
+		}
+	}
+	bool IsEmpty() const {
+		return front->next == nullptr;
+	}
+};
+
+
+
 /*
 Part 2: Practical Applications
 Now that you have your own data structures, it's time to put them to work! These are classic problems that perfectly demonstrate the LIFO and FIFO principles.
@@ -133,7 +240,7 @@ b) In a short comment, explain why the stack is the perfect tool for this type o
 */
 
 static std::string ReverseString(const char* aStr) {
-	TStack stack(strlen(aStr));
+	TStackArray stack(strlen(aStr));
 	for (int i = 0; aStr[i] != '\0'; i++) {
 		stack.Push(aStr[i]);
 	}
@@ -142,6 +249,10 @@ static std::string ReverseString(const char* aStr) {
 		reversed += static_cast<char>(stack.Pop()); // Cast int back to char
 	}
 	return reversed;
+	/*
+	* Note: The stack is the perfect tool for string reversal because it allows us to push each character of the string onto the stack and then pop them off in reverse order.
+	* And stack is using the rule of LIFO (Last In First Out), so the last character pushed onto the stack will be the first one to be popped off, effectively reversing the order of characters.
+	*/
 }
 
 /*
@@ -153,7 +264,7 @@ b) This is a fantastic exercise that will give you a "eureka" moment about how r
 static int Factorial(int n) {
 	if (n < 0) return -1; // Factorial is not defined for negative numbers
 	if (n == 0 || n == 1) return 1; // Base case
-	TStack stack(n);
+	TStackArray stack(n);
 	for (int i = 2; i <= n; i++) {
 		stack.Push(i);
 	}
@@ -172,7 +283,7 @@ c) People should Enqueue when they arrive and Dequeue when they are served, clea
 */
 
 static void SimulateWaitLine() {
-	TQueue queue(5); // Queue with a maximum size of 5
+	TQueueArray queue(5); // Queue with a maximum size of 5
 	// Simulate people arriving
 	for (int i = 1; i <= 5; i++) {
 		std::cout << "Person " << i << " arrives." << std::endl;
@@ -209,7 +320,7 @@ static void InitializeGrid() {
 	std::srand(static_cast<unsigned int>(std::time(0))); // Seed for randomness
 	for (int i = 0; i < GRID_SIZE; i++) {
 		for (int j = 0; j < GRID_SIZE; j++) {
-			grid[i][j] = std::rand() % 10; // Random values between 0 and 9
+			grid[i][j] = std::rand() % 9; // Random values between 0 and 9
 			visited[i][j] = false; // Initialize visited array
 		}
 	}
@@ -229,9 +340,9 @@ static bool IsValid(int aRow, int aCol) {
 }
 
 // The stack's LIFO behavior allows the DFS to explore one path fully before backtracking, ensuring that all possible routes are checked in depth-first order.
-static bool DFS(int startRow, int startCol) {
-	TStack stack(GRID_SIZE * GRID_SIZE);
-	stack.Push(startRow * GRID_SIZE + startCol); // Encode 2D position as 1D
+static bool DFS(int aStartRow, int aStartCol) {
+	TStackArray stack(GRID_SIZE * GRID_SIZE);
+	stack.Push(aStartRow * GRID_SIZE + aStartCol); // Encode 2D position as 1D
 	while (!stack.IsEmpty()) {
 		int pos = stack.Pop();
 		int row = pos / GRID_SIZE;
@@ -240,20 +351,32 @@ static bool DFS(int startRow, int startCol) {
 			std::cout << "Found 0 at (" << row << ", " << col << ")" << std::endl;
 			return true;
 		}
+		std::cout << "Visiting (" << row << ", " << col << ") with value " << grid[row][col] << std::endl;
 		visited[row][col] = true;
-		// Push adjacent cells onto the stack (right, down, left, up)
-		if (IsValid(row, col + 1)) stack.Push(row * GRID_SIZE + (col + 1));
-		if (IsValid(row + 1, col)) stack.Push((row + 1) * GRID_SIZE + col);
-		if (IsValid(row, col - 1)) stack.Push(row * GRID_SIZE + (col - 1));
-		if (IsValid(row - 1, col)) stack.Push((row - 1) * GRID_SIZE + col);
+		// Push adjacent cells onto the stack (top-left, top, top-right, right, bottom-right, bottom, bottom-left, left)
+		int neighbors[4][2] = {
+			{row - 1, col},     // Top
+			{row, col + 1},     // Right
+			{row + 1, col},     // Bottom
+			{row, col - 1}      // Left
+		};
+
+		for(int i = 0; i < 4; i++) {
+			int newRow = neighbors[i][0];
+			int newCol = neighbors[i][1];
+			if (IsValid(newRow, newCol)) {
+				stack.Push(newRow * GRID_SIZE + newCol);
+			}
+		}
 	}
 	std::cout << "0 not found in DFS" << std::endl;
 	return false;
 }
 
-static bool BFS(int startRow, int startCol) {
-	TQueue queue(GRID_SIZE * GRID_SIZE);
-	queue.Enqueue(startRow * GRID_SIZE + startCol); // Encode 2D position as 1D
+// The queue's FIFO behavior ensures that the BFS explores all neighbors at the present depth prior to moving on to nodes at the next depth level, effectively searching layer by layer.
+static bool BFS(int aStartRow, int aStartCol) {
+	TQueueArray queue(GRID_SIZE * GRID_SIZE);
+	queue.Enqueue(aStartRow * GRID_SIZE + aStartCol); // Encode 2D position as 1D
 	while (!queue.IsEmpty()) {
 		int pos = queue.Dequeue();
 		int row = pos / GRID_SIZE;
@@ -262,12 +385,25 @@ static bool BFS(int startRow, int startCol) {
 			std::cout << "Found 0 at (" << row << ", " << col << ")" << std::endl;
 			return true;
 		}
+		std::cout << "Visiting (" << row << ", " << col << ") with value " << grid[row][col] << std::endl;
 		visited[row][col] = true;
-		// Enqueue adjacent cells (right, down, left, up)
-		if (IsValid(row, col + 1)) queue.Enqueue(row * GRID_SIZE + (col + 1));
-		if (IsValid(row + 1, col)) queue.Enqueue((row + 1) * GRID_SIZE + col);
-		if (IsValid(row, col - 1)) queue.Enqueue(row * GRID_SIZE + (col - 1));
-		if (IsValid(row - 1, col)) queue.Enqueue((row - 1) * GRID_SIZE + col);
+		// Push adjacent cells onto the queue  (top-left, top, top-right, right, bottom-right, bottom, bottom-left, left)
+		
+		int neighbors[4][2] = {
+			{row - 1, col},     // Top
+			{row, col + 1},     // Right
+			{row + 1, col},     // Bottom
+			{row, col - 1}      // Left
+		};
+		for(int i = 0; i < 4; i++) {
+			int newRow = neighbors[i][0];
+			int newCol = neighbors[i][1];
+			if (IsValid(newRow, newCol)) {
+				queue.Enqueue(newRow * GRID_SIZE + newCol);
+			}
+		}
+
+
 	}
 	std::cout << "0 not found in BFS" << std::endl;
 	return false;
@@ -305,8 +441,8 @@ int main()
 			visited[i][j] = false; // Reset visited array
 		}
 	}
-	std::cout << "Performing BFS to find '0':" << std::endl;
-	BFS(startRow, startCol);
+	std::cout << "Stating BFS from (" << startRow << ", " << startCol << ")" << std::endl;
+	BFS(startRow, startCol); // This should find a different path to '0'
 	std::cout << "----------------------------------------------------" << std::endl << std::endl;
 
 

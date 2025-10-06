@@ -123,7 +123,7 @@ public:
 };
 
 class TNodeInteger {
-	public:
+public:
 	int data;
 	TNodeInteger* next;
 	TNodeInteger(int aData) : data(aData), next(nullptr) {}
@@ -131,8 +131,8 @@ class TNodeInteger {
 
 // Stack implemented using a linked list with dummy head node
 class TStackLinkedList {
-	private:
-		TNodeInteger* top = nullptr;
+private:
+	TNodeInteger* top = nullptr;
 public:
 	TStackLinkedList() {
 		top = new TNodeInteger(0); // Dummy head node
@@ -154,7 +154,7 @@ public:
 			int item = temp->data;
 			top->next = temp->next;
 			delete temp; // Free memory
-			return item; 
+			return item;
 		}
 		else {
 			std::cout << "Stack Underflow" << std::endl;
@@ -343,7 +343,7 @@ static bool IsValid(int aRow, int aCol) {
 static bool DFS(int aStartRow, int aStartCol) {
 	TStackArray stack(GRID_SIZE * GRID_SIZE);
 	int cellPos = aStartRow * GRID_SIZE + aStartCol; // Encode 2D position as 1D
-	stack.Push(cellPos); 
+	stack.Push(cellPos);
 	while (!stack.IsEmpty()) {
 		cellPos = stack.Pop();
 		int row = cellPos / GRID_SIZE;
@@ -354,14 +354,8 @@ static bool DFS(int aStartRow, int aStartCol) {
 		}
 		std::cout << "Visiting (" << row << ", " << col << ") with value " << grid[row][col] << std::endl;
 		visited[row][col] = true;
-		int neighbors[4][2] = {
-			{row - 1, col},     // Top
-			{row, col + 1},     // Right
-			{row + 1, col},     // Bottom
-			{row, col - 1}      // Left
-		};
-
-		for(int i = 0; i < 4; i++) {
+		int neighbors[4][2] = { {row - 1, col}, {row, col + 1}, {row + 1, col}, {row, col - 1} };
+		for (int i = 0; i < 4; i++) {
 			int newRow = neighbors[i][0];
 			int newCol = neighbors[i][1];
 			if (IsValid(newRow, newCol)) {
@@ -376,35 +370,29 @@ static bool DFS(int aStartRow, int aStartCol) {
 
 // The queue's FIFO behavior ensures that the BFS explores all neighbors at the present depth prior to moving on to nodes at the next depth level, effectively searching layer by layer.
 static bool BFS(int aStartRow, int aStartCol) {
+	int row = aStartRow, col = aStartCol;
+	int pos = row * GRID_SIZE + col; // Encode 2D position as 1D
 	TQueueArray queue(GRID_SIZE * GRID_SIZE);
-	queue.Enqueue(aStartRow * GRID_SIZE + aStartCol); // Encode 2D position as 1D
+	queue.Enqueue(pos);
 	while (!queue.IsEmpty()) {
-		int pos = queue.Dequeue();
-		int row = pos / GRID_SIZE;
-		int col = pos % GRID_SIZE;
+		pos = queue.Dequeue();
+		row = pos / GRID_SIZE;
+		col = pos % GRID_SIZE;
 		if (grid[row][col] == 0) {
 			std::cout << "Found 0 at (" << row << ", " << col << ")" << std::endl;
 			return true;
 		}
 		std::cout << "Visiting (" << row << ", " << col << ") with value " << grid[row][col] << std::endl;
 		visited[row][col] = true;
-		// Push adjacent cells onto the queue  (top-left, top, top-right, right, bottom-right, bottom, bottom-left, left)
-		
-		int neighbors[4][2] = {
-			{row - 1, col},     // Top
-			{row, col + 1},     // Right
-			{row + 1, col},     // Bottom
-			{row, col - 1}      // Left
-		};
-		for(int i = 0; i < 4; i++) {
-			int newRow = neighbors[i][0];
-			int newCol = neighbors[i][1];
-			if (IsValid(newRow, newCol)) {
-				queue.Enqueue(newRow * GRID_SIZE + newCol);
+		int neighbors[4][2] = { {row - 1, col}, {row, col + 1},{row + 1, col},{row, col - 1} };
+		for (int i = 0; i < 4; i++) {
+			row = neighbors[i][0];
+			col = neighbors[i][1];
+			if (IsValid(row, col)) {
+				pos = row * GRID_SIZE + col;
+				queue.Enqueue(pos);
 			}
 		}
-
-
 	}
 	std::cout << "0 not found in BFS" << std::endl;
 	return false;

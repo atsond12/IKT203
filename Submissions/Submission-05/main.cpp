@@ -81,7 +81,36 @@ These algorithms are your first step. They are conceptually simpler but do not p
 	b) Pay close attention to the pointer manipulation required for the linked list version—it's a fantastic challenge!
 5. Bubble Sort:
 	a) Implement a method in TSort that performs a Bubble Sort on the pointer array.
+
+
+Part 3: The Advanced Sorts (O(n log n)) - Divide and Conquer
+Now for the heavy hitters. These recursive, "Divide and Conquer" algorithms are far more efficient and are staples of modern software engineering.
+
+6. Quick Sort (on the Array):
+	a) Implement Quick Sort to sort the pointer array.
+	b) Your implementation must use the public/private recursion pattern. A public QuickSort() method calls a private QuickSortRecursive(...).
+	c) The heart of this algorithm is the Partition() helper function. Getting this right is the key to success!
+
+7. Merge Sort (on the Linked List):
+	a) Implement Merge Sort to sort the linked list. This algorithm is a natural fit for list structures.
+	b) This implementation must also use the public/private recursion pattern.
+	c) Hint: For splitting the linked list, research the "fast and slow pointer" technique.
+
+Part 4: The Great Sort-Off
+It's time for a performance battle! You will use your TSort engine to sort the same large dataset with all your implemented algorithms and analyze the results.
+
+8. Callback Implementations:
+	a) Write at least two different FCompareAccounts callback functions: one to sort by last name, and one to sort by balance.
+
+9. The Performance Battle:
+	a) Using your dataset of 5,000+ accounts, run all four of your sorting algorithms using the same callback function for a fair comparison.
+	b) For each run, capture the OperationSummary (comparisons, swaps, time).
+
+10. Analysis in Your Report:
+	a) Present your performance data in a clear table.
+	b) Write a paragraph answering: How do the results illustrate the difference between O(n²) and O(n log n) complexity? Why was Selection Sort harder on a list versus an array?
 */
+
 
 typedef int (*FCompareAccounts)(TBankAccount*, TBankAccount*);
 
@@ -97,6 +126,35 @@ private:
 		b = temp;
 		statistics.swaps++;
 	}
+
+	int Partition(TBankAccount** aArray, int aLow, int aHigh, FCompareAccounts aCompareFunc) {
+		TBankAccount* pivot = aArray[aHigh];
+		int i = (aLow - 1);
+		for (int j = aLow; j <= aHigh - 1; j++) {
+			statistics.comparisonCount++;
+			if (aCompareFunc(aArray[j], pivot) < 0) {
+				i++;
+				swap(aArray[i], aArray[j]);
+				TBankAccount* temp = aArray[i];
+				aArray[i] = aArray[j];
+				aArray[j] = temp;
+			}
+		}
+		swap(aArray[i + 1], aArray[aHigh]);
+		TBankAccount* temp = aArray[i + 1];
+		aArray[i + 1] = aArray[aHigh];
+		aArray[aHigh] = temp;
+		return (i + 1);
+	}
+
+	void QuickSortRecursive(TBankAccount** aArray, int aLow, int aHigh, FCompareAccounts aCompareFunc) {
+		if (aLow < aHigh) {
+			int pi = Partition(aArray, aLow, aHigh, aCompareFunc);
+			QuickSortRecursive(aArray, aLow, pi - 1, aCompareFunc);
+			QuickSortRecursive(aArray, pi + 1, aHigh, aCompareFunc);
+		}
+	}
+
 public:
 	TSort(TLinkedList* aList, TBankAccount** aArray) : list(aList), array(aArray) {
 		size = list->getSize();
@@ -135,25 +193,32 @@ public:
 		for (int i = 0; i < size; i++) {
 			tempList->Add(array[i]);
 		}
-		while (tempList->getSize() > 0) {
-			TLinkedListNode* current = tempList->getHead();
+
+		// Start at the first real node (head->next)
+		TLinkedListNode* current = tempList->getHead() ? tempList->getHead()->next : nullptr;
+		while (current) {
+			// find minimum starting from 'current'
 			TLinkedListNode* minNode = current;
-			if (!minNode) break; // Prevent dereferencing nullptr
-			while (current) {
+			TLinkedListNode* iter = current;
+			while (iter) {
 				statistics.comparisonCount++;
-				if (aCompareFunc(current->data, minNode->data) < 0) {
-					minNode = current;
+				// guard against null data pointers
+				if (iter->data && minNode->data && aCompareFunc(iter->data, minNode->data) < 0) {
+					minNode = iter;
 				}
-				current = current->next;
+				iter = iter->next;
 			}
-			// Fix: Only delete minNode if it's not nullptr and not the same as current
-			if (minNode) {
+
+			if (minNode && minNode->data) {
 				sortedList->Add(minNode->data);
 				tempList->Remove(minNode->data);
-				// Do not delete minNode here, as Remove already deletes the node if needed
 				statistics.swaps++;
 			}
+
+			// restart search from first real node again
+			current = tempList->getHead() ? tempList->getHead()->next : nullptr;
 		}
+
 		delete tempList;
 		printStastics();
 		return sortedList;
@@ -215,6 +280,13 @@ public:
 		printStastics();
 		return sortedList;
 	}
+
+	void QuickSortArray(FCompareAccounts aCompare) {
+		resetStatistics();
+		// Call the recursive QuickSort function
+		QuickSortRecursive(0, size - 1, aCompare);
+		printStastics();
+	}
 	
 };
 
@@ -231,34 +303,6 @@ static int CompareByCreationTimestamp(TBankAccount* a, TBankAccount* b) {
 	return 0;
 }
 
-/*
-Part 3: The Advanced Sorts (O(n log n)) - Divide and Conquer
-Now for the heavy hitters. These recursive, "Divide and Conquer" algorithms are far more efficient and are staples of modern software engineering.
-
-6. Quick Sort (on the Array):
-	a) Implement Quick Sort to sort the pointer array.
-	b) Your implementation must use the public/private recursion pattern. A public QuickSort() method calls a private QuickSortRecursive(...).
-	c) The heart of this algorithm is the Partition() helper function. Getting this right is the key to success!
-
-7. Merge Sort (on the Linked List):
-	a) Implement Merge Sort to sort the linked list. This algorithm is a natural fit for list structures.
-	b) This implementation must also use the public/private recursion pattern.
-	c) Hint: For splitting the linked list, research the "fast and slow pointer" technique.
-
-Part 4: The Great Sort-Off
-It's time for a performance battle! You will use your TSort engine to sort the same large dataset with all your implemented algorithms and analyze the results.
-
-8. Callback Implementations:
-	a) Write at least two different FCompareAccounts callback functions: one to sort by last name, and one to sort by balance.
-
-9. The Performance Battle:
-	a) Using your dataset of 5,000+ accounts, run all four of your sorting algorithms using the same callback function for a fair comparison.
-	b) For each run, capture the OperationSummary (comparisons, swaps, time).
-
-10. Analysis in Your Report:
-	a) Present your performance data in a clear table.
-	b) Write a paragraph answering: How do the results illustrate the difference between O(n²) and O(n log n) complexity? Why was Selection Sort harder on a list versus an array?
-*/
 
 
 
@@ -276,9 +320,10 @@ int main()
 
 	TSort sorter(bankAccounts, bankAccountArray);
 	sorter.SelectionSortArray(CompareByAccountNumber);
-	//sorter.SelectionSortList(CompareByCreationTimestamp);
-	//sorter.BubbleSortArray(CompareByAccountNumber);
-	//sorter.BubbleSortList(CompareByCreationTimestamp);
+	sorter.SelectionSortList(CompareByAccountNumber);
+	sorter.BubbleSortArray(CompareByCreationTimestamp);
+	sorter.QuickSortArray(CompareByAccountNumber);
+
 
 
 	// Cleanup

@@ -55,6 +55,21 @@ TLinkedList* TLinkedList::Every(FCompareAccount aCompareFunc, void* aSearchKey)
 	return resultList; // Return the new list
 }
 
+// Loop through all accounts, if aEveryFunc returns false for any, return that account
+TBankAccount* TLinkedList::Every(FEveryAccount aEveryFunc) {
+	TLinkedListNode* current = head->next;
+	int index = 0;
+	while (current != nullptr)
+	{
+		if (!aEveryFunc(current->data, index++))
+		{
+			return current->data; // Return the first account that fails the test
+		}
+		current = current->next;
+	}
+	return nullptr; // All accounts passed the test
+}
+
 TBankAccount** TLinkedList::ToArray()
 {
 	if (size == 0) return nullptr;
@@ -81,6 +96,18 @@ void TLinkedList::forEach(FForEachAccount aFunc)
 }
 
 TLinkedListNode* TLinkedList::getHead() const { return head; }
+
+void TLinkedList::Append(TBankAccount* account)
+{
+	TLinkedListNode* newNode = new TLinkedListNode(account);
+	TLinkedListNode* current = head;
+	while (current->next != nullptr)
+	{
+		current = current->next;
+	}
+	current->next = newNode;
+	size++;
+}
 
 void TLinkedList::Remove(TBankAccount* account)
 {

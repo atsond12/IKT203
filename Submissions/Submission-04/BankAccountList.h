@@ -7,6 +7,7 @@
 
 typedef bool (*FCompareAccount)(TBankAccount* account, void* searchKey);
 typedef void (*FForEachAccount)(TBankAccount* account, int index);
+typedef bool (*FEveryAccount)(TBankAccount*, int);
 
 // Node class for linked list
 class TLinkedListNode
@@ -39,9 +40,11 @@ public:
 	TBankAccount* Find(FCompareAccount, void*);
 
 	TLinkedList* Every(FCompareAccount, void*);
+	TBankAccount* Every(FEveryAccount aEveryFunc);
 	TBankAccount** ToArray();
 	void forEach(FForEachAccount);
 
+	void Append(TBankAccount* account);
 	void Remove(TBankAccount* account);
 };
 

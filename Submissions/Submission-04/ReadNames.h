@@ -1,6 +1,6 @@
 #pragma once
 #ifndef READNAMES_H
-#define READNAMES_H
+#define SHARED_LIB_H
 #include <string>
 #include <functional>
 

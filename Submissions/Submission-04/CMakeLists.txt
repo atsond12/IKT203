@@ -4,7 +4,7 @@
 
 # Add source to this project's executable.
 add_executable (Submission-04 "main.cpp" "main.h" "BankAccount.h" "ReadNames.cpp" "ReadNames.h"  "BankAccount.cpp" "BankAccount.h" "BankAccountList.cpp" "BankAccountList.h")
-target_link_libraries(Submission-04 PRIVATE SharedCode)
+target_link_libraries(Submission-04 PRIVATE LibExample)
 
 # Add source files to a Submission04Lib library
 add_library(Submission04Lib

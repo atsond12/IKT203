@@ -1,7 +1,4 @@
-﻿// Mandatory-02.cpp : Defines the entry point for the application.
-//
-
-/*
+﻿/*
 Dear Student,
 
 Remember to follow the coding standards and best practices discussed
@@ -31,17 +28,15 @@ To force an update (e.g., in Visual Studio):
 
 #include <iostream>
 #include <string_view>
+static constexpr std::string_view AssignmentName = "Category 4: Graphs & Dijkstra's Algorithm";
 
-static constexpr std::string_view AssignmentName = "Category 1: Lists, Stacks, & Queues";
-
-#if ASSIGNMENT_01_OPTION == 1
+#if ASSIGNMENT_04_OPTION == 1
+static constexpr std::string_view AssignmentOption = "Option 1 (Standard): Data Center Network Monitor.";
 #include "option1.h"
-static constexpr std::string_view AssignmentOption = "Option 1 (Standard): Console Text Editor.";
-#elif ASSIGNMENT_01_OPTION == 2
+#elif ASSIGNMENT_04_OPTION == 2
+static constexpr std::string_view AssignmentOption = "Option 2 (Advanced): Inter-city Logistics Router.";
 #include "option2.h"
-static constexpr std::string_view AssignmentOption = "Option 2 (Advanced): Console Music Player.";
 #endif
-
 
 
 int main(int argc, char* argv[])
@@ -49,6 +44,7 @@ int main(int argc, char* argv[])
 	int appStatus = 0;
 	std::cout << AssignmentName << std::endl;
 	std::cout << AssignmentOption << std::endl;
+
 
 	// Create only core or common code in main.cpp
 	// Use the option header files to implement the specific assignment option logic

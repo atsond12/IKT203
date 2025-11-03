@@ -1,7 +1,4 @@
-﻿// Mandatory-02.cpp : Defines the entry point for the application.
-//
-
-/*
+﻿/*
 Dear Student,
 
 Remember to follow the coding standards and best practices discussed
@@ -32,14 +29,14 @@ To force an update (e.g., in Visual Studio):
 #include <iostream>
 #include <string_view>
 
-static constexpr std::string_view AssignmentName = "Category 1: Lists, Stacks, & Queues";
+static constexpr std::string_view AssignmentName = "Category 3: Trees (BST, AVL & RBT)";
 
-#if ASSIGNMENT_01_OPTION == 1
+#if ASSIGNMENT_03_OPTION == 1
 #include "option1.h"
-static constexpr std::string_view AssignmentOption = "Option 1 (Standard): Console Text Editor.";
-#elif ASSIGNMENT_01_OPTION == 2
+static constexpr std::string_view AssignmentOption = "Option 1 (Standard): Employee Directory (BST vs. AVL).";
+#elif ASSIGNMENT_03_OPTION == 2
 #include "option2.h"
-static constexpr std::string_view AssignmentOption = "Option 2 (Advanced): Console Music Player.";
+static constexpr std::string_view AssignmentOption = "Option 2 (Advanced): Interpreted Calculator.";
 #endif
 
 

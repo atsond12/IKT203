@@ -32,14 +32,14 @@ To force an update (e.g., in Visual Studio):
 #include <iostream>
 #include <string_view>
 
-static constexpr std::string_view AssignmentName = "Category 1: Lists, Stacks, & Queues";
+static constexpr std::string_view AssignmentName = "Category 2: Sorting & Searching";
 
-#if ASSIGNMENT_01_OPTION == 1
+#if ASSIGNMENT_02_OPTION == 1
 #include "option1.h"
-static constexpr std::string_view AssignmentOption = "Option 1 (Standard): Console Text Editor.";
-#elif ASSIGNMENT_01_OPTION == 2
+static constexpr std::string_view AssignmentOption = "Option 1 (Standard): Cruise Ship Manifest.";
+#elif ASSIGNMENT_02_OPTION == 2
 #include "option2.h"
-static constexpr std::string_view AssignmentOption = "Option 2 (Advanced): Console Music Player.";
+static constexpr std::string_view AssignmentOption = "Option 2 (Advanced): Combined Corporate Directory.";
 #endif
 
 

@@ -34,7 +34,7 @@ int RunApp()
 	std::cout << AssignmentOption << std::endl;
 
 	// Path to the graph data file
-	std::string filename = "F:\\IKT203\\VisualStudio\\DATA\\network_graph.txt";
+	std::string filename = "F:\\IKT203\\VisualStudio\\DATA\\city_graph.txt";
 
 	std::cout << "Reading graph from file: " << filename << "\n\n";
 

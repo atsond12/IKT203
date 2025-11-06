@@ -44,6 +44,14 @@ void TSongList::Append(TSong* aSong) {
 	tail->prev = newNode;
 }
 
+void TSongList::Prepend(TSong* aSong) {
+	TSongListNode* newNode = new TSongListNode(aSong);
+	newNode->next = head->next;
+	newNode->prev = head;
+	head->next->prev = newNode;
+	head->next = newNode;
+}
+
 TSong* TSongList::GetFirstSong() const {
 	if (IsEmpty()) {
 		return nullptr; // List is empty
@@ -104,7 +112,7 @@ void TSongQueue::Enqueue(TSong* aSong) {
 TSong* TSongQueue::Dequeue() {
 	TSong* firstSong = GetFirstSong();
 	if (firstSong != nullptr) {
-		// This calss is friend of TSongList, so it can access private members
+		// This class is friend of TSongList, so it can access private members
 		TSongListNode* firstNode = head->next;
 		head->next = firstNode->next;
 		firstNode->next->prev = head;
@@ -113,3 +121,25 @@ TSong* TSongQueue::Dequeue() {
 	return firstSong;
 }
 
+void TSongQueue::EnqueuePriority(TSong* aSong) {
+	Prepend(aSong);
+}
+
+TSongStack::TSongStack() : TSongList(false) {} // Stack does not own its data
+
+void TSongStack::Push(TSong* aSong) {
+	Append(aSong);
+}
+
+//Use O(1) time complexity
+TSong* TSongStack::Pop() {
+	if (IsEmpty()) {
+		return nullptr; // Stack is empty
+	}
+	TSong* lastSong = tail->prev->song;
+	TSongListNode* lastNode = tail->prev;
+	tail->prev = lastNode->prev;
+	lastNode->prev->next = tail;
+	delete lastNode;
+	return lastSong;
+}

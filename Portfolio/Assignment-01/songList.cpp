@@ -32,10 +32,64 @@ void TSongList::Clear() {
 	tail->prev = head;
 }
 
+bool TSongList::IsEmpty() const {
+	return head->next == tail;
+}
+
 void TSongList::Append(TSong* aSong) {
 	TSongListNode* newNode = new TSongListNode(aSong);
 	newNode->prev = tail->prev;
 	newNode->next = tail;
 	tail->prev->next = newNode;
 	tail->prev = newNode;
+}
+
+TSong* TSongList::GetFirstSong() const {
+	if (IsEmpty()) {
+		return nullptr; // List is empty
+	}
+	return head->next->song;
+}
+
+// This has time complexity O(n)
+// You can use TSongListNode and get a time complexity O(1)
+TSong* TSongList::GetNextSong(TSong* aCurrentSong) const {
+	if (IsEmpty()) {
+		return nullptr; // List is empty
+	}
+
+	TSongListNode* currentNode = head->next;
+	while (currentNode != tail) {
+		if (currentNode->song == aCurrentSong) {
+			if (currentNode->next != tail) {
+				return currentNode->next->song;
+			}
+			else {
+				return nullptr; // No next song
+			}
+		}
+		currentNode = currentNode->next;
+	}
+	return nullptr; // Current song not found
+}
+
+// This has time complexity O(n)
+// You can use TSongListNode and get a time complexity O(1)
+TSong* TSongList::GetPreviousSong(TSong* aCurrentSong) const {
+	if (IsEmpty()) {
+		return nullptr; // List is empty
+	}
+	TSongListNode* currentNode = head->next;
+	while (currentNode != tail) {
+		if (currentNode->song == aCurrentSong) {
+			if (currentNode->prev != head) {
+				return currentNode->prev->song;
+			}
+			else {
+				return nullptr; // No previous song
+			}
+		}
+		currentNode = currentNode->next;
+	}
+	return nullptr; // Current song not found
 }

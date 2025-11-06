@@ -4,6 +4,9 @@
 #include "option2.h"
 #include "SharedLib.h"
 #include "song.h"
+#include "songList.h"
+
+static
 
 static bool SongReadCallback(const int aIndex, const int aTotalCount, const std::string& aArtist, const std::string& aTitle, const std::string& aYear, const std::string& aGenre, const std::string& aSource) {
 	TSong* song = new TSong(aIndex, aArtist, aTitle, aYear, aGenre, aSource);

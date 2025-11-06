@@ -10,7 +10,7 @@ option(BUILD_ASSIGNMENT_01_OPTION_1 "Build Assignment Option 1 (Standard)" OFF)
 
 add_executable(Assignment-01
     main.cpp
-)
+ "song.cpp" "song.h")
 
 # Conditionally add the correct source file
 if(BUILD_ASSIGNMENT_01_OPTION_1)

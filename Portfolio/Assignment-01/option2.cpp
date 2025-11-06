@@ -3,17 +3,12 @@
 #include <iostream>
 #include "option2.h"
 #include "SharedLib.h"
+#include "song.h"
 
 static bool SongReadCallback(const int aIndex, const int aTotalCount, const std::string& aArtist, const std::string& aTitle, const std::string& aYear, const std::string& aGenre, const std::string& aSource) {
-	// Implement the logic to process each song read from the file
-	// For example, print the song details to the console
-	std::cout << "Song " << (aIndex + 1) << " of " << aTotalCount << ":\n";
-	std::cout << "  Artist: " << aArtist << "\n";
-	std::cout << "  Title: " << aTitle << "\n";
-	std::cout << "  Year: " << aYear << "\n";
-	std::cout << "  Genre: " << aGenre << "\n";
-	std::cout << "  Source: " << aSource << "\n\n";
-	// Return true to continue reading more songs
+	TSong* song = new TSong(aIndex, aArtist, aTitle, aYear, aGenre, aSource);
+	song->printOut();
+	delete song;// Clean up memory after use, only for test purposes
 	return true;
 }
 

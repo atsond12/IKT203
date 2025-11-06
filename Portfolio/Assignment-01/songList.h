@@ -29,4 +29,24 @@ public:
 	TSong* GetNextSong(TSong* aCurrentSong) const;
 	TSong* GetPreviousSong(TSong* aCurrentSong) const;
 
+	friend class TSongQueue;
+
+};
+
+class TSongQueue : public TSongList {
+public:
+	TSongQueue();
+
+	void Enqueue(TSong* aSong);
+
+	TSong* Dequeue();
+};
+
+class TSongStack : public TSongList {
+public:
+	TSongStack();
+
+	void Push(TSong* aSong);
+
+	TSong* Pop();
 };

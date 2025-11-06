@@ -22,11 +22,11 @@ void TSongList::Clear() {
 		TSongListNode* nextNode = current->next;
 		if (isDataOwner && current->song != nullptr) {
 			delete current->song;
-			std::cout << "Deleted song data." << std::endl;
+			//std::cout << "Deleted song data." << std::endl;
 		}
 		delete current;
 		current = nextNode;
-		std::cout << "Deleted song node." << std::endl;
+		//std::cout << "Deleted song node." << std::endl;
 	}
 	head->next = tail;
 	tail->prev = head;
@@ -93,3 +93,23 @@ TSong* TSongList::GetPreviousSong(TSong* aCurrentSong) const {
 	}
 	return nullptr; // Current song not found
 }
+
+
+TSongQueue::TSongQueue() : TSongList(false) {} // Queue does not own its data
+
+void TSongQueue::Enqueue(TSong* aSong) {
+	Append(aSong);
+}
+
+TSong* TSongQueue::Dequeue() {
+	TSong* firstSong = GetFirstSong();
+	if (firstSong != nullptr) {
+		// This calss is friend of TSongList, so it can access private members
+		TSongListNode* firstNode = head->next;
+		head->next = firstNode->next;
+		firstNode->next->prev = head;
+		delete firstNode;
+	}
+	return firstSong;
+}
+

@@ -6,7 +6,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 # "ON" = build Option 1, "OFF" = build Option 2.
-option(BUILD_ASSIGNMENT_02_OPTION_1 "Build Assignment Option 1 (Standard)" ON)
+option(BUILD_ASSIGNMENT_02_OPTION_1 "Build Assignment Option 1 (Standard)" OFF)
 
 add_executable(Assignment-02
     main.cpp
@@ -30,10 +30,10 @@ else()
     )
     target_compile_definitions(Assignment-02 PRIVATE "ASSIGNMENT_02_OPTION=2")
 endif()
-target_link_libraries(Assignment-02
-    PRIVATE
-    SharedLib
-)
+#target_link_libraries(Assignment-02
+ #   PRIVATE
+  #  SharedLib
+#)
 
 
 add_custom_command(TARGET Assignment-02 POST_BUILD

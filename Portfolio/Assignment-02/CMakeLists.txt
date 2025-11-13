@@ -1,15 +1,13 @@
 ﻿set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-
 # "ON" = build Option 1, "OFF" = build Option 2.
-option(BUILD_ASSIGNMENT_02_OPTION_1 "Build Assignment Option 1 (Standard)" ON)
+option(BUILD_ASSIGNMENT_02_OPTION_1 "Build Assignment Option 1 (Standard)" OFF)
 
 add_executable(Assignment-02
     main.cpp
+    DirectoryTypes.h
+    DirectoryTypes.cpp
 )
 
 # Conditionally add the correct source file

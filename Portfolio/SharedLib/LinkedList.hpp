@@ -2,6 +2,14 @@
 /**
 	* @brief TLinkedListNode class represents a node in a linked list.
 */
+//Define TLinkedList class
+template <typename T>
+class TLinkedList;
+
+template <typename T>
+class TMergeSort;
+
+
 template <typename T>
 class TLinkedListNode
 {
@@ -21,7 +29,16 @@ public:
 		prev = temp;
 	}
 
+	T GetData() const {
+		return data;
+	}
+
+	TLinkedListNode* GetNext() const {
+		return next;
+	}
+
 	friend class TLinkedList<T>;
+	friend class TMergeSort<T>;
 };
 
 /*
@@ -53,6 +70,11 @@ private:
 		}
 		head->next = tail;
 		tail->prev = head;
+		count = 0;
+		// Console logging for debug purposes
+		std::cout << "Cleared list:" << std::endl;
+		std::cout << "Deleted " << deletedNodes << " nodes" << std::endl;
+		std::cout << "Deleted " << deletedData << " data items." << std::endl;
 	}
 
 public:
@@ -71,9 +93,15 @@ public:
 		delete tail;
 	}
 
-	bool isEmpty() const {
+	bool IsEmpty() const {
 		return count == 0;
 	}
+
+	int GetCount() const { return count; }
+
+	TLinkedListNode<T>* GetHead() const { return head; }
+	TLinkedListNode<T>* GetTail() const { return tail; }
+
 
 	void Append(const T& aData) {
 		TLinkedListNode<T>* newNode = new TLinkedListNode<T>(aData);
@@ -94,7 +122,7 @@ public:
 	}
 
 	T RemoveHead() {
-		if (isEmpty()) throw std::runtime_error("List is empty");
+		if (IsEmpty()) throw std::runtime_error("List is empty");
 		TLinkedListNode<T>* nodeToRemove = head->next;
 		T data = nodeToRemove->data;
 		// Re-link the list
@@ -108,7 +136,7 @@ public:
 	}
 
 	T RemoveTail() {
-		if (isEmpty()) throw std::runtime_error("List is empty");
+		if (IsEmpty()) throw std::runtime_error("List is empty");
 		TLinkedListNode<T>* nodeToRemove = tail->prev;
 		T data = nodeToRemove->data;
 		// Re-link the list

@@ -12,6 +12,7 @@ target_sources(SharedLib
     PUBLIC
     # You can add more functionalty to SharedLib.h just by adding more definitions in SharedLib.h.
     SharedLib.h
+    LinkedList.hpp
     # Or add other shared files here
     PRIVATE
     ReadNames.cpp
